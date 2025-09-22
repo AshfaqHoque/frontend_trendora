@@ -1,4 +1,5 @@
-import { BarChart3, Users, Package, ShoppingCart, Store, Settings } from "lucide-react";
+
+import { BarChart3, Package, ShoppingCart, Store, Settings, LogOut, User, BellIcon } from "lucide-react";
 
 // components/admin/AdminSidebar.tsx
 interface AdminSidebarProps {
@@ -9,11 +10,12 @@ interface AdminSidebarProps {
 export default function AdminSidebar({ activeTab, onTabChange }: AdminSidebarProps) {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
-    { id: 'admins', label: 'Admins', icon: Users },
+    { id: 'profile', label: 'Profile', icon: User },
     { id: 'products', label: 'Products', icon: Package },
     { id: 'orders', label: 'Orders', icon: ShoppingCart },
     { id: 'vendors', label: 'Vendors', icon: Store },
-    { id: 'settings', label: 'Settings', icon: Settings }
+    { id: 'logout', label: 'Logout', icon: LogOut },
+
   ];
 
   return (

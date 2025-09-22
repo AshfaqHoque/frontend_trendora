@@ -1,57 +1,79 @@
+import { getUser } from "@/lib/auth";
 import Link from "next/link";
 
-export default function Header() {
+export default async function Header() {
+  const user = await getUser();
+
   return (
-    <header className="bg-[#131921] border-b border-black py-2">
-      <div className="max-w-[1200px] mx-auto flex items-center justify-between px-5">
-        
+    <header className="bg-[#131921] border-b border-gray-800 shadow-sm">
+      <div className="max-w-[1200px] mx-auto flex items-center justify-between px-5 py-3">
+
         {/* Logo */}
         <Link
           href="/"
-          className="text-2xl font-bold text-white no-underline"
+          className="text-2xl font-extrabold text-white hover:text-orange-500 transition-colors"
         >
-          QuickShopBD
+          Trendora
         </Link>
 
         {/* Search Bar */}
-        <div className="flex items-center gap-5">
-          <div className="flex items-center">
-            <input
-              type="text"
-              placeholder="Search products..."
-              className="px-3 py-2 border border-gray-300 rounded-l-md w-[300px] text-sm"
-            />
-            <button className="px-3 py-2 bg-orange-500 text-white rounded-r-md cursor-pointer">
-              Search
-            </button>
-          </div>
+        <div className="flex flex-1 max-w-lg mx-5">
+          <input
+            type="text"
+            placeholder="Search products..."
+            className="flex-1 px-4 py-2 rounded-l-md border border-gray-700 bg-gray-900 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+          />
+          <button className="px-4 py-2 bg-orange-500 text-white rounded-r-md hover:bg-orange-600 transition-colors text-sm font-medium">
+            Search
+          </button>
         </div>
 
         {/* Navigation */}
-        <nav className="flex items-center gap-5">
-          <Link href="/help" className="text-white text-sm no-underline">
-            HELP & SUPPORT
-          </Link>
-          <Link href="/seller" className="text-white text-sm no-underline">
-            BECOME A SELLER
+        <nav className="flex items-center gap-4">
+          <Link
+            href="/help"
+            className="text-gray-300 text-sm hover:text-white transition-colors"
+          >
+            Help & Support
           </Link>
           <Link
-            href="/auth/login"
-            className="text-white text-sm font-medium no-underline"
+            href="/seller"
+            className="text-gray-300 text-sm hover:text-white transition-colors"
           >
-            LOGIN
+            Become a Seller
           </Link>
-          <Link
-            href="/auth/signup"
-            className="text-white text-sm font-medium px-3 py-1 border border-black bg-[#b16316] rounded no-underline"
-          >
-            SIGN UP
-          </Link>
+
+          {/* User Auth Section */}
+          {user?.email ? (
+            <Link
+              href={`/profile/${user.id}`}
+              className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-medium hover:bg-blue-700 transition-colors"
+              title="Go to Profile"
+            >
+              {user.email[0].toUpperCase()}
+            </Link>
+          ) : (
+            <>
+              <Link
+                href="/auth/login"
+                className="text-sm font-medium px-3 py-1 border border-gray-700 bg-orange-500 rounded hover:bg-orange-600 transition-colors"
+              >
+                Login
+              </Link>
+              <Link
+                href="/auth/signup"
+                className="text-sm font-medium px-3 py-1 border border-gray-700 bg-orange-500 rounded hover:bg-orange-600 transition-colors"
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
+
           <Link
             href="/cart"
-            className="text-white text-sm font-medium px-3 py-1 bg-[#102550] rounded no-underline"
+            className="text-sm font-medium px-3 py-1 bg-blue-900 rounded hover:bg-blue-800 transition-colors"
           >
-            CART
+            Cart
           </Link>
         </nav>
       </div>

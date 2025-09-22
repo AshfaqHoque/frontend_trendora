@@ -14,8 +14,10 @@ export default function VerifyEmailPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const emailParam = searchParams.get('email') || '';
-  setEmail(emailParam);
+  useEffect(() => {
+    const emailParam = searchParams.get('email') || '';
+    setEmail(emailParam);
+  }, [searchParams]);
 
   const handleChange = (setter: any) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setter(e.target.value);
@@ -42,7 +44,7 @@ export default function VerifyEmailPage() {
     try {
       const result = await verifyEmail(validation.data);
       alert(result.message || 'Email verified successfully!');
-      router.push('/');
+      router.push('/auth/login');
       
     } catch (error: any) {
       setIsSubmitting(false);

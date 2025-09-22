@@ -75,7 +75,30 @@ export const productSchema = z.object({
     .optional(),
 });
 
+export const updateAdminSchema = z.object({
+  fullName: z
+    .string()
+    .min(1, "Full name is required")
+    .max(100, "Name must not exceed 100 characters")
+    .regex(/^[^0-9]*$/, { message: "Name should not contain numbers" })
+    .optional(),
+  age: z
+    .number()
+    .min(20, "Age must be at least 20")
+    .int("Age must be a whole number")
+    .optional(),
+  linkedInUrl: z
+    .string()
+    .regex(
+      /^https:\/\/(www\.)?linkedin\.com\/in\/[A-Za-z0-9-_%]+\/?$/,
+      { message: "LinkedIn URL must be a valid profile link" }
+    )
+    .optional(),
+});
+
+
 export type SignupData = z.infer<typeof signupSchema>;
 export type LoginData = z.infer<typeof loginSchema>;
 export type VerifyEmailData = z.infer<typeof verifyEmailSchema>;
 export type ProductData = z.infer<typeof productSchema>;
+export type UpdateAdminData = z.infer<typeof updateAdminSchema>;

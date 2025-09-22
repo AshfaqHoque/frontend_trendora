@@ -1,5 +1,6 @@
-// components/admin/dashboard/DashboardStats.tsx
+import { getTotalOrders, getTotalSales } from '@/lib/api';
 import { TrendingUp, TrendingDown, ShoppingCart, Users, DollarSign } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface StatCardProps {
   title: string;
@@ -9,7 +10,7 @@ interface StatCardProps {
   prefix?: string;
 }
 
-const StatCard = ({ title, value, growth, icon: Icon, prefix = '$' }: StatCardProps) => (
+const StatCard = ({ title, value, growth, icon: Icon, prefix = 'BDT ' }: StatCardProps) => (
   <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
     <div className="flex items-center justify-between mb-2">
       <span className="text-sm text-gray-500">{title}</span>
@@ -24,16 +25,45 @@ const StatCard = ({ title, value, growth, icon: Icon, prefix = '$' }: StatCardPr
         <span>{Math.abs(growth)}%</span>
       </div>
     </div>
-    <span className="text-xs text-gray-400">vs last month</span>
+    <span className="text-xs text-gray-400">vs last year</span>
   </div>
 );
 
 export default function DashboardStats() {
+  const [totalSales, setTotalSales] = useState<number>(0);
+  const [salesGrowth, setSalesGrowth] = useState<number>(0);
+  useEffect(() => {
+    async function fetchTotalSales() {
+      try {
+        const response = await getTotalSales();
+        setTotalSales(response.totalSales); 
+        setSalesGrowth(response.salesGrowth);
+      } catch (error) {
+        console.error('Failed to fetch total sales', error);
+      }
+    }
+    fetchTotalSales();
+  }, []);
+
+  const [totalOrders, setTotalOrders] = useState<number>(0);
+  const [ordersGrowth, setOrdersGrowth] = useState<number>(0);
+
+  useEffect(() => {
+    async function fetchTotalOrders() {
+      try {
+        const response = await getTotalOrders();
+        setTotalOrders(response.totalOrders); 
+        setOrdersGrowth(response.ordersGrowth);
+      } catch (error) {
+        console.error('Failed to fetch total orders', error);
+      }
+    }
+    fetchTotalOrders();
+  }, []);
+
+  
+
   const stats = {
-    totalSales: 983410,
-    salesGrowth: 3.36,
-    totalOrders: 58375,
-    ordersGrowth: -2.69,
     totalVisitors: 237782,
     visitorsGrowth: -8.02
   };
@@ -42,14 +72,14 @@ export default function DashboardStats() {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
       <StatCard
         title="Total Sales"
-        value={stats.totalSales}
-        growth={stats.salesGrowth}
+        value={totalSales}
+        growth={salesGrowth}
         icon={DollarSign}
       />
       <StatCard
         title="Total Orders"
-        value={stats.totalOrders}
-        growth={stats.ordersGrowth}
+        value={totalOrders}
+        growth={ordersGrowth}
         icon={ShoppingCart}
         prefix=""
       />

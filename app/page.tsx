@@ -26,14 +26,17 @@ export default function Home() {
     loadProducts();
   }, []);
 
-  if (loading) return <div>Loading products...</div>;
-  if (error) return <div>Error: {error}</div>;
-  if (products.length === 0) return <div>No products found</div>;
+  if (loading) return <div className="bg-white text-black p-5">Loading products...</div>;
+  if (error) return <div className="bg-white text-black p-5">Error: {error}</div>;
+  if (products.length === 0) return <div className="bg-white text-black p-5">No products found</div>;
 
-  return (
+return (
+  <div className="bg-white text-black min-h-screen">
     <div className="max-w-7xl mx-auto px-5 py-10">
-      <h1 className="text-2xl font-bold mb-6">All Products</h1>
+    <h1 className="text-3xl font-bold tracking-tight text-orange-600">All Products</h1>
       <ProductGrid products={products} />
     </div>
-  );
+  </div>
+);
+
 }

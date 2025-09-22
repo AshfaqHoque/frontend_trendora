@@ -42,6 +42,7 @@ export default function SignupPage() {
     }
 
     try {
+      setIsSubmitting(false);
       const result = await registerAdmin(validation.data);
       alert(result.message);
       router.push(`/auth/verifyotp?email=${encodeURIComponent(email)}`);
@@ -158,7 +159,7 @@ export default function SignupPage() {
             value={linkedInUrl} 
             onChange={handleChange(setLinkedInUrl)}
             className={`w-full px-3 py-2 text-sm text-gray-800 border rounded ${
-              error && (error.includes('LinkedIn') || error.includes('url')) 
+              error && (error.includes('LinkedIn')) 
                 ? 'border-red-600 border-2' 
                 : 'border-gray-400'
             } box-border`}
