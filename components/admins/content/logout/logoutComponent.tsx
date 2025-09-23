@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { logoutAdmin } from "@/lib/api";
 
 export const dynamic = 'force-dynamic';
@@ -9,7 +8,6 @@ interface LogoutComponentProps {
 }
 
 export default function LogoutComponent({ onLogoutSuccess }: LogoutComponentProps) {
-  const router = useRouter();
 
   const handleLogout = async () => {
     try {
@@ -18,7 +16,7 @@ export default function LogoutComponent({ onLogoutSuccess }: LogoutComponentProp
       if (onLogoutSuccess) {
         onLogoutSuccess();
       } else {
-        router.replace('/auth/login');
+        window.location.href = "/auth/login"; 
       }
     } catch (error) {
       console.error('Logout error:', error);

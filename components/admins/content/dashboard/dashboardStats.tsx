@@ -1,4 +1,4 @@
-import { getTotalOrders, getTotalSales } from '@/lib/api';
+import { getTotalCustomers, getTotalOrders, getTotalSales } from '@/lib/api';
 import { TrendingUp, TrendingDown, ShoppingCart, Users, DollarSign } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -61,12 +61,21 @@ export default function DashboardStats() {
     fetchTotalOrders();
   }, []);
 
-  
+  const [totalCustomers, setTotalCustomers] = useState<number>(0);
+  const [customerGrowth, setCustomerGrowth] = useState<number>(0);
 
-  const stats = {
-    totalVisitors: 237782,
-    visitorsGrowth: -8.02
-  };
+  useEffect(() => {
+    async function fetchTotalCustomers() {
+      try {
+        const response = await getTotalCustomers();
+        setTotalCustomers(response.totalCustomers);
+        setCustomerGrowth(response.customerGrowth);
+      } catch (error) {
+        console.error('Failed to fetch total customers', error);
+      }
+    }
+    fetchTotalCustomers();
+  }, []);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -84,9 +93,9 @@ export default function DashboardStats() {
         prefix=""
       />
       <StatCard
-        title="Total Visitors"
-        value={stats.totalVisitors}
-        growth={stats.visitorsGrowth}
+        title="Total Customers"
+        value={totalCustomers}
+        growth={customerGrowth}
         icon={Users}
         prefix=""
       />

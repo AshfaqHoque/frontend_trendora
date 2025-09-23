@@ -25,6 +25,7 @@ export interface Product {
   category?: string;
   rating?: number;
   image?: string;
+  status: 'active' | 'inactive' | 'out_of_stock'; 
   vendor?: {
     id: number;
     name?: string;
@@ -53,4 +54,9 @@ export interface Order {
 
 export interface OrderWithDetails extends Order {
   showItems: boolean;
+}
+
+export interface StatusData {
+  status: string;
+  count: number;
 }

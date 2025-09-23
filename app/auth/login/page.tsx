@@ -10,6 +10,7 @@ export default function LoginPage() {
   const handleLoginSuccess = (id: number) => {
     alert("Login successful!");
     router.push(`/profile/${id}`);
+    router.refresh();
   };
 
   return (

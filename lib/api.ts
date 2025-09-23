@@ -1,6 +1,6 @@
 import axios from "axios";
 import { LoginData, SignupData, VerifyEmailData } from "./validation";
-import { Admin, Product } from "./types";
+import { Admin, Product, StatusData } from "./types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -33,9 +33,15 @@ export async function getTotalSales() {
   return response.data;
 }
 
-
 export async function getTotalOrders() {
   const response = await axios.get(`${API_BASE_URL}/order/total-orders`, {
+    withCredentials: true,
+  });
+  return response.data;
+}
+
+export async function getTotalCustomers() {
+  const response = await axios.get(`${API_BASE_URL}/customer/total-customers`, {
     withCredentials: true,
   });
   return response.data;
@@ -50,6 +56,13 @@ export async function getYearlyStats() {
 
 export async function getTopSellingProducts() {
   const response = await axios.get(`${API_BASE_URL}/order/top-selling-products`, {
+    withCredentials: true,
+  });
+  return response.data;
+}
+
+export async function getTopCustomers() {
+  const response = await axios.get(`${API_BASE_URL}/order/top-customers`, {
     withCredentials: true,
   });
   return response.data;
@@ -220,6 +233,15 @@ export async function deleteProduct(productId: number) {
   return response.data;
 }
 
+export async function setProductInactive(productId: number) {
+  const response = await axios.patch(`${API_BASE_URL}/product/${productId}/inactive`,{}, {
+      withCredentials: true,
+    }
+  );
+  return response.data;
+}
+
+
 export async function updateProduct(productId: number, productData: Partial<Product>) {
   const response = await axios.put(`${API_BASE_URL}/product/${productId}`, productData, {
     withCredentials: true,
@@ -232,4 +254,11 @@ export async function createProduct(productData: Omit<Product, 'id'>) {
     withCredentials: true,
   });
   return response.data;
+}
+
+export async function fetchOrderStatusSummary(): Promise<StatusData[]> {
+  const res = await axios.get(`${API_BASE_URL}/order/order-status-summary`, {
+    withCredentials: true, 
+  });
+  return res.data;
 }

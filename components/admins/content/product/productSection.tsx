@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchProducts, deleteProduct } from '@/lib/api';
+import { fetchProducts, setProductInactive } from '@/lib/api'; // ✅ use new API
 import { Product } from '@/lib/types';
 
 export default function ProductsSection() {
@@ -23,14 +23,19 @@ export default function ProductsSection() {
     loadProducts();
   }, []);
 
-  const handleDeleteProduct = async (productId: number) => {
-    if (!confirm('Are you sure you want to delete this product?')) return;
+  const handleSetInactive = async (productId: number) => {
+    if (!confirm('Are you sure you want to set this product as inactive?')) return;
 
     try {
-      await deleteProduct(productId);
-      setProducts(prev => prev.filter(p => p.id !== productId));
+      const res = await setProductInactive(productId);
+      setProducts(prev =>
+        prev.map(p =>
+          p.id === productId ? { ...p, status: 'inactive' } : p
+        )
+      );
+      alert(res.message || 'Product set to inactive');
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to delete product');
+      alert(err instanceof Error ? err.message : 'Failed to update product status');
     }
   };
 
@@ -73,16 +78,21 @@ export default function ProductsSection() {
                         {stockStatus.text} ({product.stock})
                       </span>
                       {product.rating && <p className="text-gray-600 mt-2">Rating: {product.rating}/5</p>}
+                      {product.status && (
+                        <p className="text-sm mt-2">
+                          Status: <span className="font-medium">{product.status}</span>
+                        </p>
+                      )}
                     </div>
                   </div>
                   {product.description && <p className="text-gray-600 mt-3">{product.description}</p>}
                 </div>
               </div>
               <button
-                onClick={() => handleDeleteProduct(product.id)}
-                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+                onClick={() => handleSetInactive(product.id)}
+                className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition-colors"
               >
-                Delete
+                Set Inactive
               </button>
             </div>
           </div>

@@ -1,81 +1,88 @@
 import { getUser } from "@/lib/auth";
 import Link from "next/link";
+import SimpleSearch from "@/components/search";
+import SearchBar from "@/components/search";
 
 export default async function Header() {
   const user = await getUser();
 
   return (
-    <header className="bg-[#131921] border-b border-gray-800 shadow-sm">
-      <div className="max-w-[1200px] mx-auto flex items-center justify-between px-5 py-3">
-
-        {/* Logo */}
-        <Link
-          href="/"
-          className="text-2xl font-extrabold text-white hover:text-orange-500 transition-colors"
-        >
-          Trendora
-        </Link>
-
-        {/* Search Bar */}
-        <div className="flex flex-1 max-w-lg mx-5">
-          <input
-            type="text"
-            placeholder="Search products..."
-            className="flex-1 px-4 py-2 rounded-l-md border border-gray-700 bg-gray-900 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
-          />
-          <button className="px-4 py-2 bg-orange-500 text-white rounded-r-md hover:bg-orange-600 transition-colors text-sm font-medium">
-            Search
-          </button>
-        </div>
-
-        {/* Navigation */}
-        <nav className="flex items-center gap-4">
+    <header className="bg-[#131921] text-white">
+      <div className="max-w-[1200px] mx-auto">
+        <div className="flex items-center px-4 py-2 space-x-4">
+          
+          {/* Logo Section */}
           <Link
-            href="/help"
-            className="text-gray-300 text-sm hover:text-white transition-colors"
+            href="/"
+            className="flex-shrink-0 px-2 py-1 hover:border border-white rounded transition-all duration-200"
+            aria-label="Trendora Home"
           >
-            Help & Support
-          </Link>
-          <Link
-            href="/seller"
-            className="text-gray-300 text-sm hover:text-white transition-colors"
-          >
-            Become a Seller
+            <div className="text-2xl font-bold">Trendora</div>
+            <div className="text-xs text-gray-300 -mt-1">.com</div>
           </Link>
 
-          {/* User Auth Section */}
-          {user?.email ? (
+          {/* Search Section */}
+          <SearchBar />
+
+          {/* Navigation Items */}
+          <div className="flex items-center space-x-2">
+            
+            {/* Help */}
             <Link
-              href={`/profile/${user.id}`}
-              className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-medium hover:bg-blue-700 transition-colors"
-              title="Go to Profile"
+              href="/help"
+              className="hidden lg:block px-2 py-1 hover:border border-white rounded transition-all duration-200"
             >
-              {user.email[0].toUpperCase()}
+              <div className="text-xs text-gray-300">Customer</div>
+              <div className="text-sm font-bold">Service</div>
             </Link>
-          ) : (
-            <>
-              <Link
-                href="/auth/login"
-                className="text-sm font-medium px-3 py-1 border border-gray-700 bg-orange-500 rounded hover:bg-orange-600 transition-colors"
-              >
-                Login
-              </Link>
-              <Link
-                href="/auth/signup"
-                className="text-sm font-medium px-3 py-1 border border-gray-700 bg-orange-500 rounded hover:bg-orange-600 transition-colors"
-              >
-                Sign Up
-              </Link>
-            </>
-          )}
 
-          <Link
-            href="/cart"
-            className="text-sm font-medium px-3 py-1 bg-blue-900 rounded hover:bg-blue-800 transition-colors"
-          >
-            Cart
-          </Link>
-        </nav>
+            {/* User Account + Seller */}
+            {user?.email ? (
+              // If user is logged in
+              <Link
+                href={`/profile/${user.id}`}
+                className="px-2 py-1 hover:border border-white rounded transition-all duration-200"
+                title={`Welcome, ${user.email}`}
+              >
+                <div className="text-xs text-gray-300">
+                  Hello, {user.email.split("@")[0]}
+                </div>
+                <div className="text-sm font-bold flex items-center">
+                  Account
+                </div>
+              </Link>
+            ) : (
+              <div className="flex items-center space-x-1">
+                <Link
+                  href="/auth/login"
+                  className="px-2 py-1 hover:border border-white rounded transition-all duration-200"
+                >
+                  <div className="text-xs text-gray-300">Hello, sign in</div>
+                  <div className="text-sm font-bold flex items-center">
+                    Account
+                  </div>
+                </Link>
+                <Link
+                  href="/auth/signup"
+                  className="px-2 py-1 hover:border border-white rounded transition-all duration-200"
+                >
+                  <div className="text-xs text-gray-300">New customer?</div>
+                  <div className="text-sm font-bold text-[#febd69]">Start here</div>
+                </Link>
+
+                {/* Become a Seller  */}
+                <Link
+                  href="/seller"
+                  className="hidden lg:block px-2 py-1 hover:border border-white rounded transition-all duration-200"
+                >
+                  <div className="text-xs text-gray-300">Become</div>
+                  <div className="text-sm font-bold">a Seller</div>
+                </Link>
+              </div>
+            )}
+
+          </div>
+        </div>
       </div>
     </header>
   );
